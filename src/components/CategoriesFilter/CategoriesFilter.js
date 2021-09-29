@@ -1,6 +1,6 @@
 import { Card, Checkbox } from 'semantic-ui-react';
 
-function CategoriesFilter({categories}) {
+function CategoriesFilter({categories, handleCheckedCategory}) {
     return(
         <Card 
             color='blue' 
@@ -15,7 +15,12 @@ function CategoriesFilter({categories}) {
             <Card.Content>
                 {categories.map((category, index) => {
                     return(
-                        <Checkbox label={category.name} key={index} />
+                        <Checkbox 
+                            label={category.name} 
+                            key={index}
+                            onClick={()=>{handleCheckedCategory(category)}}
+                            checked={category.checked}
+                        />
                     )
                 })}
             </Card.Content>

@@ -33,6 +33,23 @@ function Products() {
                 setLoadingCat(false);
             });
     }, []);
+
+
+    const handleCheckedCategory = (categoryProp) => {
+        const newCategories = categories.map((category) =>{
+            if (category.name === categoryProp.name) {
+                return {
+                    name: categoryProp.name, 
+                    checked: !categoryProp.checked,
+                };  
+            } else {
+                return category;
+            }
+        });
+        setCategories(newCategories);
+    }
+
+
     return (
         <Container style={{marginTop:"100px", position: "relative"}}>
             {loadingCat ? (
@@ -43,7 +60,10 @@ function Products() {
                     width={'30px'} 
                 />
             ) : (
-                <CategoriesFilter categories={categories} />
+                <CategoriesFilter 
+                    categories={categories}
+                    handleCheckedCategory={handleCheckedCategory}
+                />
             )}
             
             {loading ? (
@@ -57,7 +77,25 @@ function Products() {
                 </ContainerLoading>  
                 ) : ( 
                 <Grid columns= {4}>
-                    {products.map((product, index) => {
+                    {products.filter((product)=>{
+                        let isChecked = false;
+                        let selectedCategories = 0;
+
+                        categories.forEach((category)=>{
+                            if (product.category === category.name && category.checked === true) {
+                                isChecked = true;
+                            }
+                            if (category.checked === true) {
+                                selectedCategories++;
+                            }
+                        });
+
+                        if (selectedCategories >= 1) {
+                            return isChecked;
+                        } else {
+                            return true;
+                        }
+                    }).map((product, index) => {
                         return( 
                             <Grid.Column key={index}> 
                             <Product product={product} /> 
